@@ -1,0 +1,140 @@
+package ejerciociocupvero;
+import java.io.*;
+import java_cup.runtime.*; 
+parser code
+{:
+
+      public void report_error(String message, Object info) {
+        StringBuffer m = new StringBuffer("Error");
+    if("#0".equals(info.toString())){
+          System.out.println("Estoy receptando un valor nulo/ falta ;");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+if("#1".equals(info.toString())){
+          System.out.println("La sintaxis ingresada en incorrecta");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+        if("#2".equals(info.toString())){
+          System.out.println("Error se esperaba una K");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+        if("#3".equals(info.toString())){
+          System.out.println("Error se esperaba una M");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+        if("#4".equals(info.toString())){
+          System.out.println("Se esperaba una S");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+        if("#5".equals(info.toString())){
+          System.out.println("Se esperaba una H");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+ if("#6".equals(info.toString())){
+          System.out.println("ID inválido");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+         if("#7".equals(info.toString())){
+          System.out.println("Se esperaba un /");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+  if("#8".equals(info.toString())){
+          System.out.println("Se esperaba un =");
+           System.out.println("Por lo que te Sugiero: "+message);
+       }
+
+if("#9".equals(info.toString())){
+          System.out.println("Se esperaba un ;");
+           System.out.println("Por lo que te Sugiero: "+message);
+        }
+    if(info instanceof java_cup.runtime.Symbol) {
+      java_cup.runtime.Symbol s=((java_cup.runtime.Symbol)info);
+      /* Comprueba si el numero de línea es mayor o igual que cero */
+      String linea="";
+      String columna="";
+
+      if(s.left >= 0) {
+
+        linea=""+s.left+1;
+        m.append(" en linea "+(s.left+1));
+        /*Comprueba si el numero de columna es mayoro igual que cero */
+        if (s.right >= 0){
+            columna=""+s.right+1;
+        }
+            m.append(", y columna "+(s.right+1));
+      }
+      if (!linea.equals("")&&!columna.equals("")) {
+  System.out.println("El error se ha detectado en la linea: "+linea+" y la columna: "+columna);
+}else{
+
+  System.out.println("No se ha ingresado datos correctos");
+
+}
+    }
+    m.append(" : "+message);
+    //System.err.println(m);
+    }
+  
+public void report_fatal_error(String message, Object info) {
+       	report_error(message, info);
+		//System.exit(1);
+    }
+
+    public void conversion(String a, String b, int a1,int b1){
+ 
+  double c;  
+ c=a1/b1;
+ 
+  System.out.print(" La Velocidad de:\n"+a1+" "+a+"/"+b1+""+b+"="+c+""+a+"/"+b+"\n"); 
+ 
+}
+        public static void main(String[] args) throws FileNotFoundException, Exception{
+        try {
+            AnalizadorSintactico asin = new AnalizadorSintactico(
+                    new AnalizadorLexico( new FileReader(args[0])));
+            Object result = asin.parse().value;
+            System.out.println("\n*** Resultados finales ***"+result);
+        } catch (NullPointerException ex) {
+            System.out.println("Tenemos Problemas con la Sintaxis");
+                   }
+    }
+:}
+
+terminal         KILOMETROS,METROS,SEGUNDOS,HORA,ID,DIV,IGUAL,PUNTOYCOMA;
+terminal Integer NUMERO;
+
+non terminal Object lista, expresion, unidad ;
+
+lista ::= expresion PUNTOYCOMA {: System.out.println("Sentencia correcta sin errores.");:}|
+error expresion:e{: parser.report_error("revise la sintaxis",e); :}  
+|ID {: System.out.println("Sentencia ingresada incorrectamente.");:}
+|KILOMETROS {: System.out.println("Sentencia ingresada  incorrectamente.");:}
+|SEGUNDOS {: System.out.println("Sentencia ingresada  incorrectamente.");:}
+|HORA {: System.out.println("Sentencia ingresada incorrectamente.");:}
+|METROS {: System.out.println("Sentencia ingresada  incorrectamente.");:}
+|IGUAL {: System.out.println("Sentencia ingresada  incorrectamente.");:}
+|PUNTOYCOMA {: System.out.println("Sentencia ingresada  incorrectamente.");:}
+|NUMERO {: System.out.println("Sentencia ingresada  incorrectamente.");:};
+expresion::= ID IGUAL NUMERO:n unidad:m1 DIV  NUMERO:n1 unidad:m2 
+{: parser.conversion(m1.toString(),m2.toString(),n.intValue(),n1.intValue());:} ;
+
+unidad::= KILOMETROS:k
+			{:
+              RESULT = k.toString();
+            :}
+            |
+          METROS: m
+			{:
+              RESULT = m.toString();
+            :}
+            |
+             SEGUNDOS: sg
+			{:
+              RESULT = sg.toString();
+            :}
+            |
+			 HORA: h
+			{:
+              RESULT = h.toString();
+            :}
+            ;
