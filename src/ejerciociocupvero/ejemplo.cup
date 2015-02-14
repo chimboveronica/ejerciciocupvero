@@ -60,11 +60,11 @@ if("#9".equals(info.toString())){
 
       if(s.left >= 0) {
 
-        linea=""+s.left+1;
+        linea=""+(s.left+1);
         m.append(" en linea "+(s.left+1));
         /*Comprueba si el numero de columna es mayoro igual que cero */
         if (s.right >= 0){
-            columna=""+s.right+1;
+            columna=""+(s.right+1);
         }
             m.append(", y columna "+(s.right+1));
       }

@@ -6,47 +6,67 @@ parser code
 
       public void report_error(String message, Object info) {
         StringBuffer m = new StringBuffer("Error");
-    if("#0".equals(info.toString())){
-          System.out.println("Estoy receptando un valor nulo/ falta ;");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-if("#1".equals(info.toString())){
-          System.out.println("La sintaxis ingresada en incorrecta");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-        if("#2".equals(info.toString())){
-          System.out.println("Error se esperaba una K");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-        if("#3".equals(info.toString())){
-          System.out.println("Error se esperaba una M");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-        if("#4".equals(info.toString())){
-          System.out.println("Se esperaba una S");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-        if("#5".equals(info.toString())){
-          System.out.println("Se esperaba una H");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
- if("#6".equals(info.toString())){
-          System.out.println("ID inválido");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-         if("#7".equals(info.toString())){
-          System.out.println("Se esperaba un /");
-           System.out.println("Por lo que te Sugiero: "+message);
-        }
-  if("#8".equals(info.toString())){
-          System.out.println("Se esperaba un =");
-           System.out.println("Por lo que te Sugiero: "+message);
-       }
+        System.out.println(info.toString());
 
+    if("#0".equals(info.toString())){
+          System.out.println("Sentencia incorrecta; o sentencia vacia o falta ; al final de la sentencia");
+          
+        }else{
+
+          if("#1".equals(info.toString())){
+          System.out.println("La sintaxis ingresada en incorrecta");
+           
+        }else{
+           if("#2".equals(info.toString())){
+          System.out.println("Error se esperaba una K (KILOMETROS), o me esta enviando un numero como string o revisar antes de K debe de ir un número");
+          
+        }else{
+         if("#3".equals(info.toString())){
+          System.out.println("Error se esperaba una M (METROS) , o me esta enviando un numero como string o revisar antes de M debe de ir un número");
+
+        } else{
+           if("#4".equals(info.toString())){
+          System.out.println("Se esperaba una S (SEGUNDOS), o me esta enviando un numero como string o revisar antes de S debe de ir un número");
+       
+        }else{
+          if("#5".equals(info.toString())){
+          System.out.println("Se esperaba una H (HORA), o me esta enviando un numero como string o revisar antes y despues de H debe de ir un número");
+           
+        }else{
+if("#6".equals(info.toString())){
+          System.out.println("ID inválido");
+           
+        }else{
+           if("#7".equals(info.toString())){
+          System.out.println("Se esperaba un /");
+          
+        }else{
+          if("#8".equals(info.toString())){
+          System.out.println("Se esperaba un =");
+          
+       }else{
 if("#9".equals(info.toString())){
-          System.out.println("Se esperaba un ;");
-           System.out.println("Por lo que te Sugiero: "+message);
+          System.out.println("Estas finalizando con un ; y aun la expresión esta incompleta ");
+           
+        
+       }else{
+if("#10".equals(info.toString())){
+          System.out.println("Tu expresion esta incompleta falta un = o /");
+           
         }
+
+       }
+     }
+        }
+        }
+        } 
+        }
+        }
+        }
+        }
+        }
+
+
     if(info instanceof java_cup.runtime.Symbol) {
       java_cup.runtime.Symbol s=((java_cup.runtime.Symbol)info);
       /* Comprueba si el numero de línea es mayor o igual que cero */
@@ -55,21 +75,18 @@ if("#9".equals(info.toString())){
 
       if(s.left >= 0) {
 
-        linea=""+s.left+1;
+        linea=""+(s.left+1);
         m.append(" en linea "+(s.left+1));
         /*Comprueba si el numero de columna es mayoro igual que cero */
         if (s.right >= 0){
-            columna=""+s.right+1;
+            columna=""+(s.right+1);
         }
             m.append(", y columna "+(s.right+1));
       }
       if (!linea.equals("")&&!columna.equals("")) {
   System.out.println("El error se ha detectado en la linea: "+linea+" y la columna: "+columna);
-}else{
-
-  System.out.println("No se ha ingresado datos correctos");
-
 }
+
     }
     m.append(" : "+message);
     //System.err.println(m);
@@ -102,39 +119,19 @@ public void report_fatal_error(String message, Object info) {
 
 terminal         KILOMETROS,METROS,SEGUNDOS,HORA,ID,DIV,IGUAL,PUNTOYCOMA;
 terminal Integer NUMERO;
-
 non terminal Object lista, expresion, unidad ;
 
-lista ::= expresion PUNTOYCOMA {: System.out.println("Sentencia correcta sin errores.");:}|
-error expresion:e{: parser.report_error("revise la sintaxis",e); :}  
-|ID {: System.out.println("Sentencia ingresada incorrectamente.");:}
-|KILOMETROS {: System.out.println("Sentencia ingresada  incorrectamente.");:}
-|SEGUNDOS {: System.out.println("Sentencia ingresada  incorrectamente.");:}
-|HORA {: System.out.println("Sentencia ingresada incorrectamente.");:}
-|METROS {: System.out.println("Sentencia ingresada  incorrectamente.");:}
-|IGUAL {: System.out.println("Sentencia ingresada  incorrectamente.");:}
-|PUNTOYCOMA {: System.out.println("Sentencia ingresada  incorrectamente.");:}
-|NUMERO {: System.out.println("Sentencia ingresada  incorrectamente.");:};
+lista ::= expresion PUNTOYCOMA {: System.out.println("Sentencia correcta sin errores.");:} | expresion PUNTOYCOMA expresion PUNTOYCOMA{: System.out.println("Sentencia correcta sin errores.");:};
 expresion::= ID IGUAL NUMERO:n unidad:m1 DIV  NUMERO:n1 unidad:m2 
 {: parser.conversion(m1.toString(),m2.toString(),n.intValue(),n1.intValue());:} ;
-
 unidad::= KILOMETROS:k
 			{:
-              RESULT = k.toString();
-            :}
-            |
-          METROS: m
-			{:
+              RESULT = k.toString(); :}
+            | METROS: m		{:
               RESULT = m.toString();
-            :}
-            |
-             SEGUNDOS: sg
-			{:
-              RESULT = sg.toString();
-            :}
-            |
-			 HORA: h
-			{:
+            :}|SEGUNDOS: sg
+			{:      RESULT = sg.toString();    :}
+            | HORA: h			{:
               RESULT = h.toString();
             :}
             ;

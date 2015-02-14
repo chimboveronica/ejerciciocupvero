@@ -57,23 +57,30 @@ public class Main {
                         System.out.println("\n*** Generando ***\n");
                         String archLexico = "";
                         String archSintactico = "";
+                        
                         if (args.length > 0) {
                             System.out.println("\n*** Procesando archivos custom ***\n");
                             archLexico = args[0];
                             archSintactico = args[1];
                         } else {
                             System.out.println("\n*** Procesando archivo default ***\n");
+                            // guardo el nombre delos dos archivos
                             archLexico = "ejemplo.lex";
                             archSintactico = "ejemplo.cup";
                         }
+                        
                         String[] alexico = {archLexico};
                         String[] asintactico = {"-parser", "AnalizadorSintactico", archSintactico};
+                        //ejecuto el archivo jflex
                         jflex.Main.main(alexico);
                         try {
+                        //ejecuto el archivo cup    
                             java_cup.Main.main(asintactico);
                         } catch (Exception ex) {
                             Logger.getLogger(EjerciocioCupVero.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        
+                        
                         //movemos los archivos generados
                         boolean mvAL = moverArch("Lexer.java");
                         boolean mvAS = moverArch("AnalizadorSintactico.java");
